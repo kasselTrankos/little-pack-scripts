@@ -1,5 +1,6 @@
 <?php
 require_once 'Colors.php';
+require_once 'Folders.php';
 
 $showLines = false;
 foreach($argv as $a){
@@ -18,33 +19,12 @@ if (strlen($str)>0) {
   exit;
 }
 
-function folderize($f, $str, $founded){
-
-  if(is_dir($f)){
-
-      $files = opendir($f);
-      while (false !== ($file = readdir($files))) {
-        $ff = $f.'/'.$file;
-        if(is_dir($ff) && $file!='.' && $file!='..'){
-          return folderize($ff, $str, $founded);
-        }else if($file!='.' && $file!='..'){
-          $contents = file_get_contents($ff);
-          $pattern = preg_quote($str, '/');
-          $pattern = "/^.*$pattern.*\$/m";
-          if(preg_match_all($pattern, $contents, $matches)){
-            array_push($founded, $ff);
-          }
-        }
-      }
-  }
-  return $founded;
-}
 function echoe($str, $showLines){
   $colors = new Colors();
   $str = str_replace(array("\n\r", "\n", "\r"), '', $str);
+  $folders = new Folders(getcwd(), $str);
 
-
-  $founded = folderize(getcwd(), $str, []);
+  $founded = $folders->getFounded();
   if(count($founded)>0){
     for($i=0; $i<count($founded); $i++){
       $lines = getLineWithString($founded[$i], $str);
