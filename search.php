@@ -12,29 +12,43 @@ $str = fgets($stdin);
 
 
 if (strlen($str)>0) {
-  folderize($str, $showLines);
+  echoe($str, $showLines);
 }else{
   echo "Nada, Bye.\n";
   exit;
 }
 
-function folderize($str, $showLines){
-  $colors = new Colors();
-  $str = str_replace(array("\n\r", "\n", "\r"), '', $str);
-  $f = getcwd();
-  $files = opendir($f);
-  while (false !== ($file = readdir($files))) {
-      $contents = file_get_contents($file);
-      $pattern = preg_quote($str, '/');
-      $pattern = "/^.*$pattern.*\$/m";
-      if(preg_match_all($pattern, $contents, $matches)){
-        $founded[] = $file;
+function folderize($f, $str, $founded){
+
+  if(is_dir($f)){
+
+      $files = opendir($f);
+      while (false !== ($file = readdir($files))) {
+        $ff = $f.'/'.$file;
+        if(is_dir($ff) && $file!='.' && $file!='..'){
+          return folderize($ff, $str, $founded);
+        }else if($file!='.' && $file!='..'){
+          $contents = file_get_contents($ff);
+          $pattern = preg_quote($str, '/');
+          $pattern = "/^.*$pattern.*\$/m";
+          if(preg_match_all($pattern, $contents, $matches)){
+            array_push($founded, $ff);
+          }
+        }
       }
   }
-  if(isset($founded)){
+  return $founded;
+}
+function echoe($str, $showLines){
+  $colors = new Colors();
+  $str = str_replace(array("\n\r", "\n", "\r"), '', $str);
+
+
+  $founded = folderize(getcwd(), $str, []);
+  if(count($founded)>0){
     for($i=0; $i<count($founded); $i++){
       $lines = getLineWithString($founded[$i], $str);
-      $veces = (count($lines)>0)?" veces ":" vez ";
+      $veces = (count($lines)>1)?" veces ":" vez ";
       $echo =  "encontrado ";
       $echo .= $colors->getColoredString(count($lines), "yellow");
       $echo .= $veces;
@@ -44,7 +58,6 @@ function folderize($str, $showLines){
       $echo .=" en  \"";
       $echo .= $colors->getColoredString($founded[$i], "light_green");
       $echo .="\" \n";
-
       echo $echo;
 
       if($showLines){
