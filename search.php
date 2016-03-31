@@ -34,15 +34,28 @@ function folderize($str, $showLines){
   if(isset($founded)){
     for($i=0; $i<count($founded); $i++){
       $lines = getLineWithString($founded[$i], $str);
-      $veces = (count($lines)>0)?"veces":"vez";
-      echo "encontrado ";
-      echo $colors->getColoredString(count($lines)." ".$veces, "yellow");
-      echo $colors->getColoredString("\"$str\" en  \"$founded[$i]\" \n", "red");
+      $veces = (count($lines)>0)?" veces ":" vez ";
+      $echo =  "encontrado ";
+      $echo .= $colors->getColoredString(count($lines), "yellow");
+      $echo .= $veces;
+      $echo .="\"";
+      $echo .=$colors->getColoredString($str, "light_blue");
+      $echo .="\"";
+      $echo .=" en  \"";
+      $echo .= $colors->getColoredString($founded[$i], "light_green");
+      $echo .="\" \n";
+
+      echo $echo;
 
       if($showLines){
 
         for($t=0; $t<count($lines); $t++){
-          echo "linea:".$lines[$t][1]." --> ".$lines[$t][0]." <--- \n";
+          $lin = "\t linea: ";
+          $lin .= $colors->getColoredString($lines[$t][1], "yellow");
+          $lin .=" ---> ";
+          $lin .=$colors->getColoredString($lines[$t][0], "light_cyan");
+          $lin .=" <--- \n";
+          echo $lin;
         }
       }
 
