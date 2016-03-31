@@ -1,17 +1,22 @@
 <?php
+$showLines = false;
+foreach($argv as $a){
+  if($a==='lines' || $a==='-l') $showLines=true;
+
+}
 echo "bienvenido, vamos a ver que string buscar:\n";
 $stdin = fopen('php://stdin', 'r');
 $str = fgets($stdin);
 
 
 if (strlen($str)>0) {
-  folderize($str);
+  folderize($str, $showLines);
 }else{
   echo "Nada, Bye.\n";
   exit;
 }
 
-function folderize($str){
+function folderize($str, $showLines){
   $str = str_replace(array("\n\r", "\n", "\r"), '', $str);
   $f = getcwd();
   $files = opendir($f);
@@ -26,10 +31,16 @@ function folderize($str){
   if(isset($founded)){
     for($i=0; $i<count($founded); $i++){
       $lines = getLineWithString($founded[$i], $str);
-      echo "encontrado \"$str\" en  \"$founded[$i]\n";
-      for($t=0; $t<count($lines); $t++){
-        echo "line:".$lines[$t][1]." --> ".$lines[$t][0]." <--- \n";
+      $veces = (count($lines)>0)?"veces":"vez";
+      echo "encontrado ".count($lines)." $veces \"$str\" en  \"$founded[$i]\"\n";
+      if($showLines){
+
+        for($t=0; $t<count($lines); $t++){
+          echo "linea:".$lines[$t][1]." --> ".$lines[$t][0]." <--- \n";
+        }
       }
+
+
 
     }
 
