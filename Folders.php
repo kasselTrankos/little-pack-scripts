@@ -22,7 +22,6 @@ class Folders{
             $pattern = preg_quote($str, '/');
             $pattern = "/^.*$pattern.*\$/m";
             if(preg_match_all($pattern, $contents, $matches)){
-              echo " DIR IS ".$f."\n";
               $this->founded[] = $ff;
             }
           }
