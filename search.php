@@ -1,6 +1,6 @@
 <?php
 require_once 'Colors.php';
-$colors = new Colors();
+
 $showLines = false;
 foreach($argv as $a){
   if($a==='lines' || $a==='-l') $showLines=true;
@@ -19,6 +19,7 @@ if (strlen($str)>0) {
 }
 
 function folderize($str, $showLines){
+  $colors = new Colors();
   $str = str_replace(array("\n\r", "\n", "\r"), '', $str);
   $f = getcwd();
   $files = opendir($f);
