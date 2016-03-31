@@ -1,4 +1,6 @@
 <?php
+require_once 'Colors.php';
+$colors = new Colors();
 $showLines = false;
 foreach($argv as $a){
   if($a==='lines' || $a==='-l') $showLines=true;
@@ -32,7 +34,10 @@ function folderize($str, $showLines){
     for($i=0; $i<count($founded); $i++){
       $lines = getLineWithString($founded[$i], $str);
       $veces = (count($lines)>0)?"veces":"vez";
-      echo "encontrado ".count($lines)." $veces \"$str\" en  \"$founded[$i]\"\n";
+      echo "encontrado ";
+      echo $colors->getColoredString(count($lines)." ".$veces, "yellow");
+      echo $colors->getColoredString("\"$str\" en  \"$founded[$i]\" \n", "red");
+
       if($showLines){
 
         for($t=0; $t<count($lines); $t++){
