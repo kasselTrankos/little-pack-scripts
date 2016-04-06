@@ -22,13 +22,14 @@ class Folders{
             if(!$reg){
               $pattern = preg_quote($str, '/');
               $pattern = "/^.*$pattern.*\$/m";
+              if(preg_match_all($pattern, $contents, $matches)){
+                $this->founded[] = $ff;
+              }
             }else{
               if(preg_match_all($str, $file, $matches)) $this->founded[]=array($file ,$ff);
             }
 
-            if(preg_match_all($pattern, $contents, $matches)){
-              $this->founded[] = $ff;
-            }
+
           }
         }
     }

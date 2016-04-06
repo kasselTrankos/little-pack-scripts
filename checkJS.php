@@ -10,7 +10,10 @@ foreach($list as $key=>$val){
 $stdin = fopen('php://stdin', 'r');
 
 $str = fgets($stdin);
-echo $list[+$str][1];
+
 $source = file_get_contents($list[+$str][1]);
-echo $source;
+$tokens = j_token_get_all( $source );
+
+$Prog = JParser::parse_string( $source );
+echo $Prog->dump( new JLex );;
 ?>
