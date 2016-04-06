@@ -10,7 +10,13 @@ foreach($list as $key=>$val){
 $stdin = fopen('php://stdin', 'r');
 
 $str = fgets($stdin);
+require 'UglifyJS/parse-js.php';
 
+$contents = file_get_contents($list[+$str][1]);
+
+$tokenizer = ParseJS::tokenizer($contents);
+
+print_r($tokenizer->get_tokens());
 $source = file_get_contents($list[+$str][1]);
 $tokens = j_token_get_all( $source );
 
