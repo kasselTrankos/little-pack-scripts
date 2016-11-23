@@ -3,8 +3,7 @@
     $pName = 'PRCL' ;
     $pVersion = isset($_POST['pVersion']) ? $_POST['pVersion'] : null ;
     $showCases = true;
-
-    if($argv){
+    if(count($argv)>1){
     	for($i=0;$i<count($argv);$i++){
 	    	if($argv[$i]==='PRCL'){
 	    		$pName="PRCL";
@@ -65,7 +64,11 @@
 		        if($dir = opendir($ruta)){
 		            while(($archivo = readdir($dir)) !== false){
 		                if($archivo != '.' && $archivo != '..' && $archivo != '.htaccess' && $archivo != 'generador-properties.php' && $archivo != 'sonar-project.properties' && $archivo != 'pom.xml'){
-				            array_push($rutas, $ruta.$archivo);
+		                	$trunk = $archivo.'/trunk';
+		                	if(is_dir($trunk)){
+		                		array_push($rutas, $ruta.$trunk);
+		                	}
+
 		                }
 		            }
 		            closedir($dir);
@@ -102,6 +105,7 @@ sonar.language=js
 sonar.javascript.jstestdriver.reportsfolder=jstestdriver
 sonar.dynamicAnalysis=reuseReports
 sonar.sourceEncoding=UTF-8
+exclusions=**/test/**,**/tags/**
 ";
 
 
