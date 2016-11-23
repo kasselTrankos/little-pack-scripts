@@ -1,7 +1,7 @@
 # PHP little pack of scripts
 This is useful script into PHP, for my every day.
 
-1.Search // Search.php:
+1. Search // Search.php:
 
 	use search with -l or line then show line and string where is it.
 
