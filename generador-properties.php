@@ -56,6 +56,9 @@
 				break;
 		}
     }
+    	function addFiles(){
+
+    	}
 
 		//Creamos el listado de directorios que cuelgan de la carpeta principal
 		function listar_directorios_ruta($ruta){
@@ -66,9 +69,30 @@
 		                if($archivo != '.' && $archivo != '..' && $archivo != '.htaccess' && $archivo != 'generador-properties.php' && $archivo != 'sonar-project.properties' && $archivo != 'pom.xml'){
 		                	$trunk = $archivo.'/trunk';
 		                	if(is_dir($trunk)){
-		                		array_push($rutas, $ruta.$trunk);
-		                	}
+		                		$trunk.='/src';
+		                		if(is_dir($trunk)){
+		                			$trunk.='/main';
+		                			if(is_dir($trunk)){
+		                				$trunk.='/webapp';
+		                				if(is_dir($trunk)){
+		                					$trunk.='/js';
+		                					if(is_dir($trunk)){
+		                						$files = scandir($ruta.$trunk);
+		                						$trunk.='/';
+		                						for($i=0;$i< count($files);$i++){
+		                							if(preg_match("/.*_controller|.*directive|.*_model|.*_service|app|cnt|main/", $files[$i], $output_array)){
+		                								array_push($rutas, $ruta.$trunk.$files[$i]);
+		                							}
+		                						}
 
+		                					}
+
+		                				}
+
+		                			}
+
+		                		}
+		                	}
 		                }
 		            }
 		            closedir($dir);
