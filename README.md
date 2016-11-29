@@ -12,4 +12,5 @@ This is useful script into PHP, for my every day.
 	use this script to generate the sonar-runner properties, and when is generated then automatic run sonar-runner -e
 
 3. Generator of .html with Coverages // coberturas.php
+
 	use this script to create a .html file, that contains all the coverages of each cgt

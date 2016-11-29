@@ -163,7 +163,7 @@
 
 		//Escritura del archivo de propiedades para Sonar-Runner
 		function escribir_archivo($rutas, $properties, $pName){
-			$pKey = $properties['pKey'];
+			$pKey = $properties['pKey-'.$pName];
     		$pVersion= $properties['pVersion-'.$pName];
 
 			$rutas[0] = str_replace("./" , "", $rutas[0]);
