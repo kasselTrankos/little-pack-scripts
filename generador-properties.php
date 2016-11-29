@@ -21,6 +21,22 @@
 	    		$pName="GEST";
 	    		break;
 	    	}
+	    	if($argv[$i]==='PRCL-CNT'){
+	    		$pName="PRCL-CNT";
+	    		break;
+	    	}
+	    	if($argv[$i]==='GCLI-CNT'){
+	    		$pName="GCLI-CNT";
+	    		break;
+	    	}
+	    	if($argv[$i]==='PRSR-CNT'){
+	    		$pName="PRSR-CNT";
+	    		break;
+	    	}
+	    	if($argv[$i]==='GEST-CNT'){
+	    		$pName="GEST-CNT";
+	    		break;
+	    	}
 	    }
 	    $showCases = false;
     }
@@ -36,6 +52,10 @@
 	    echo "\t2: GCLI\n";
 	    echo "\t3: PRSR\n";
 	    echo "\t4: GEST\n";
+	    echo "\t5: PRCL-CNT\n";
+	    echo "\t6: GCLI-CNT\n";
+	    echo "\t7: PRSR-CNT\n";
+	    echo "\t8: GEST-CNT\n";
 		$stdin = fopen('php://stdin', 'r');
 		$str = fgets($stdin);
 		switch ((int)$str) {
@@ -51,9 +71,22 @@
 			case 4:
 				$pName="GEST";
 				break;
+			case 5:
+				$pName="PRCL-CNT";
+				break;
+			case 6:
+				$pName="GCLI-CNT";
+				break;
+			case 7:
+				$pName="PRSR-CNT";
+				break;
+			case 8:
+				$pName="GEST-CNT";
+				break;
 			default:
 				$pName="PRCL";
 				break;
+
 		}
     }
     	function addFiles(){
@@ -69,6 +102,32 @@
 		                if($archivo != '.' && $archivo != '..' && $archivo != '.htaccess' && $archivo != 'generador-properties.php' && $archivo != 'sonar-project.properties' && $archivo != 'pom.xml'){
 		                	$trunk = $archivo.'/trunk';
 		                	if(is_dir($trunk)){
+		                		$cnts = scandir($ruta.$trunk);
+		                		 for($i=0;$i< count($cnts);$i++){
+        							if(preg_match("/.*-webapp/", $cnts[$i], $output_array))
+        							{
+        								$trunk.='/'.$cnts[$i];
+        								if(is_dir($trunk)){
+        									$trunk.='/src';
+        									if(is_dir($trunk)){
+        										$trunk.='/main';
+	        									if(is_dir($trunk)){
+	        										$trunk.='/webapp';
+		        									if(is_dir($trunk)){
+		        										$files = scandir($ruta.$trunk);
+		        										$trunk.='/';
+		        										for($i=0;$i< count($files);$i++){
+				                							if(preg_match("/.*_controller|.*directive|.*_model|.*_service|app|cnt|main/", $files[$i], $output_array)){
+				                								array_push($rutas, $ruta.$trunk.$files[$i]);
+				                							}
+				                						}
+		        									}
+	        									}
+        									}
+        								}
+        								//array_push($rutas, $ruta.$trunk.$cnts[$i]);
+        							}
+        						}
 		                		$trunk.='/src';
 		                		if(is_dir($trunk)){
 		                			$trunk.='/main';
@@ -105,7 +164,7 @@
 		//Escritura del archivo de propiedades para Sonar-Runner
 		function escribir_archivo($rutas, $properties, $pName){
 			$pKey = $properties['pKey'];
-    		$pVersion= $properties['pVersion'];
+    		$pVersion= $properties['pVersion-'.$pName];
 
 			$rutas[0] = str_replace("./" , "", $rutas[0]);
 			$rutasFinal= $rutas[0].",";
@@ -120,6 +179,7 @@
 
 
 //No tabular estas líneas
+
 $propiedades ="
 sonar.projectKey= ".$pKey."
 sonar.projectName= ".$pName."
@@ -139,11 +199,11 @@ exclusions=**/test/**,**/tags/**
 
 				echo "Archivo de propiedades creado correctamente.\nPuede ejecutar Sonar-Runner desde la consola dentro de esta carpeta.";
 		}
-		function write($properties, $filename)
+		function write($properties, $filename, $pName)
 		{
 		   	$content="";
 
-		   	$properties['pVersion']= $properties['pVersion']+0.1;
+		   	$properties['pVersion-'.$pName]= $properties['pVersion-'.$pName]+0.1;
 		   	foreach($properties as $k=>$v){
 		   		$content.=$k."=".$v."\n";
 		   	}
@@ -153,8 +213,8 @@ exclusions=**/test/**,**/tags/**
 		    fclose($fileWrite);
 		}
 		listar_directorios_ruta($ruta);
-		escribir_archivo($rutas, $properties,$pName);
-		write($properties, $pDir);
+		escribir_archivo($rutas, $properties, $pName);
+		write($properties, $pDir, $pName);
 		system('sonar-runner -e');
 
 ?>
