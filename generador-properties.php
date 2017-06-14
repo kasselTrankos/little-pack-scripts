@@ -117,7 +117,7 @@
 		        										$files = scandir($ruta.$trunk);
 		        										$trunk.='/';
 		        										for($i=0;$i< count($files);$i++){
-				                							if(preg_match("/.*_controller|.*directive|.*_model|.*_service|app|cnt|main/", $files[$i], $output_array)){
+				                							if(preg_match("/.*_controller|.*_directive|.*_model|.*_service|.*_constant|app|cnt|main/", $files[$i], $output_array)){
 				                								array_push($rutas, $ruta.$trunk.$files[$i]);
 				                							}
 				                						}
@@ -139,7 +139,7 @@
 		                						$files = scandir($ruta.$trunk);
 		                						$trunk.='/';
 		                						for($i=0;$i< count($files);$i++){
-		                							if(preg_match("/.*_controller|.*directive|.*_model|.*_service|app|cnt|main/", $files[$i], $output_array)){
+		                							if(preg_match("/.*_controller|.*_constant|.*_directive|.*_model|.*_service|app|cnt|main/", $files[$i], $output_array)){
 		                								array_push($rutas, $ruta.$trunk.$files[$i]);
 		                							}
 		                						}
@@ -180,8 +180,7 @@
 
 //No tabular estas líneas
 
-$propiedades ="
-sonar.projectKey= ".$pKey."
+$propiedades ="sonar.projectKey= ".$pKey."
 sonar.projectName= ".$pName."
 sonar.projectVersion= ".$pVersion."
 sonar.sources= ".$rutasFinal."
